@@ -2,11 +2,28 @@ import { Hono } from "hono"
 import { Geohashing } from "./geohashing"
 import { DateTime } from "luxon"
 import { zValidator } from "@hono/zod-validator"
+import { setVapidDetails, type PushSubscription } from "web-push"
 import * as z from "zod/v4"
+import { cleanEnv, str } from "envalid"
 
+const env = cleanEnv(process.env, {
+  VAPID_PUBLIC_KEY: str(),
+  VAPID_PRIVATE_KEY: str(),
+  VAPID_CONTACT_URI: str(),
+})
+
+console.log("Starting Geohash Alert...")
 const app = new Hono()
 const geohashing = new Geohashing()
-console.log("Starting Geohash Alert...")
+
+setVapidDetails(
+  env.VAPID_CONTACT_URI,
+  env.VAPID_PUBLIC_KEY,
+  env.VAPID_PRIVATE_KEY
+)
+
+// TODO: We need a database :p
+const subscriptions: PushSubscription[] = []
 
 app.get("/api/v1/hello", (c) => {
   return c.text("Hello Hono!")
