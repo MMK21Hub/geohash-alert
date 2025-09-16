@@ -2,7 +2,8 @@
   "name": "geohash-alert",
   "private": true,
   "workspaces": [
-    "backend"
+    "backend",
+    "frontend"
   ],
   "dependencies": {
     "envalid": "^8.1.0",
