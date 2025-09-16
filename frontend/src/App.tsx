@@ -1,30 +1,20 @@
 import { $ } from "voby"
-import styles from "./styles/App.module.css"
 
 function App(): JSX.Element {
-  const count = $(0)
-  const increment = () => count((value) => value + 1)
-
   return (
-    <div class={styles.App}>
-      <header class={styles.header}>
-        <p>
-          <button type="button" onClick={increment}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          class={styles.link}
-          href="https://github.com/vobyjs/voby"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Voby
-        </a>
+    <div>
+      <header>
+        <h1>Geohash Alert</h1>
       </header>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+        }}
+      >
+        <label for="home-coords">Enter your home coordinates:</label>
+        <input type="text" id="home-coords" placeholder="51.50741, 0.12782" />
+        <button type="submit">Submit</button>
+      </form>
     </div>
   )
 }

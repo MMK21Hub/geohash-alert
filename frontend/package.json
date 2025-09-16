@@ -11,12 +11,15 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^4.6.4",
-    "vite": "^2.9.7",
-    "voby-vite": "^1.0.0"
+    "daisyui": "^5.1.12",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5",
+    "voby-vite": "^1.2.5"
   },
   "dependencies": {
-    "voby": "*"
+    "@tailwindcss/vite": "^4.1.13",
+    "tailwindcss": "^4.1.13",
+    "voby": "^0.58.1"
   },
   "private": true
 }
