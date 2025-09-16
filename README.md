@@ -1,15 +1,11 @@
-# geohash-alert
+# Geohash Alert
 
-To install dependencies:
+This project uses [Bun](https://bun.com) and a monorepo structure (using Bun workspaces).
+
+## Hacking on the backend
 
 ```bash
 bun install
+cd backend
+bun dev
 ```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.2.22. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
