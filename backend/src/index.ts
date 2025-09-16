@@ -43,9 +43,4 @@ app.get(
   }
 )
 
-console.log(
-  "GeoHash 2:",
-  await geohashing.getGeohash(DateTime.now(), ["51", "-0"])
-)
-
 export default app
