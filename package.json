@@ -3,5 +3,8 @@
   "private": true,
   "workspaces": [
     "backend"
-  ]
+  ],
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
 }
