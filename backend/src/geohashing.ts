@@ -44,7 +44,9 @@ export class Geohashing {
     const jdiaValue = await fetchJDIA(applicableDate)
     if (jdiaValue === null) return null // Geohash not yet known
     const geohashString = `${applicableDate.toISODate()}-${jdiaValue}`
+    console.debug("Geohash string:", geohashString)
     const hash = createHash("md5").update(geohashString).digest("hex")
+    console.debug("MD5 hash:", hash)
     const [latHash, lonHash] = [hash.slice(0, 16), hash.slice(16)]
     // Treating the hashes as the fractional part of a hex number between 0 and 1, convert them to decimal
     const [latDecimal, lonDecimal] = [latHash, lonHash].map((h) => {
