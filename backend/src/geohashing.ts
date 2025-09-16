@@ -1,5 +1,13 @@
-import { DateTime } from "luxon"
+import { DateTime, Settings as LuxonSettings } from "luxon"
 import { createHash } from "node:crypto"
+
+LuxonSettings.throwOnInvalid = true
+
+declare module "luxon" {
+  interface TSSettings {
+    throwOnInvalid: true
+  }
+}
 
 /** @see https://geohashing.site/geohashing/Dow_Jones_Industrial_Average */
 // Alternative servers: www1.geo.crox.net or www2.geo.crox.net
@@ -33,15 +41,22 @@ export type Graticule = [string, string]
 export type LatLng = [number, number]
 
 export class Geohashing {
+  djiaCache: Map<string, string> = new Map()
   constructor() {}
+
+  async getDJIA(date: DateTime): Promise<string | null> {
+    const isoDate = date.toISODate()
+    const cached = this.djiaCache.get(isoDate)
+    if (cached) return cached
+    return await fetchDJIA(date)
+  }
 
   async getGeohash(
     givenDate: DateTime,
     graticule: Graticule
   ): Promise<LatLng | null> {
     const applicableDate = getApplicableDate(givenDate)
-    // TODO: caching
-    const djiaValue = await fetchDJIA(applicableDate)
+    const djiaValue = await this.getDJIA(applicableDate)
     if (djiaValue === null) return null // Geohash not yet known
     const geohashString = `${givenDate.toISODate()}-${djiaValue}`
     console.debug("Geohash string:", geohashString)
