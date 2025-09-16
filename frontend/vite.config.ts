@@ -13,7 +13,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "index.html",
-        sw: "src/sw/sw.ts",
+        sw: "sw.ts",
       },
       output: {
         entryFileNames: (chunk) => {

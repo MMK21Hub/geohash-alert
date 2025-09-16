@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "lib": ["WebWorker", "ES2022"],
+    "noEmit": false
+  },
+  "include": ["sw.ts"]
+}

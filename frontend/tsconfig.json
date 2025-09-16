@@ -12,5 +12,6 @@
     "noEmit": true,
     "isolatedModules": true
   },
-  "exclude": ["src/sw"]
+  "exclude": ["sw.ts"]
+  // "references": [{ "path": "src" }]
 }

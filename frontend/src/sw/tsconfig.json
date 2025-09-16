@@ -1,6 +1,0 @@
-{
-  "compilerOptions": {
-    "lib": ["WebWorker"]
-  },
-  "include": ["sw.ts"]
-}
