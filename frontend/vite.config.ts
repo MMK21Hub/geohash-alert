@@ -9,4 +9,19 @@ export default defineConfig({
       "/api": "http://localhost:3000",
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: "index.html",
+        sw: "src/sw/sw.ts",
+      },
+      output: {
+        entryFileNames: (chunk) => {
+          // Service worker file has to always be at /sw.js
+          if (chunk.name === "sw") return "sw.js"
+          return "[name].[hash].js"
+        },
+      },
+    },
+  },
 })
