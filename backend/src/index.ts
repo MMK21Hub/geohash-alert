@@ -22,6 +22,15 @@ setVapidDetails(
   env.VAPID_PRIVATE_KEY
 )
 
+const PushSubscription = z.object({
+  endpoint: z.url(),
+  expirationTime: z.number().positive().nullable(),
+  keys: z.object({
+    p256dh: z.string(),
+    auth: z.string(),
+  }),
+})
+
 // TODO: We need a database :p
 const subscriptions: PushSubscription[] = []
 
@@ -44,6 +53,7 @@ app.get(
     if (lng < -30)
       return c.json(
         {
+          success: false,
           error: {
             name: "NotImplementedError",
             message: "Locations west of 30°W are not supported yet",
@@ -59,5 +69,12 @@ app.get(
     return c.json({ geohash: { location, graticule } })
   }
 )
+
+app.post("/api/v1/subscribe", async (c) => {
+  const subscriptionJSON = await c.req.json()
+  const subscription = PushSubscription.parse(subscriptionJSON)
+  subscriptions.push(subscription)
+  return c.json({ success: true })
+})
 
 export default app
