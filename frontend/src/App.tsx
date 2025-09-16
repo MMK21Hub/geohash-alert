@@ -10,7 +10,7 @@ function App(): JSX.Element {
       </div>
       <main class="py-6 px-4">
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault()
             const input = document.getElementById("home-coords")
             if (!(input instanceof HTMLInputElement))
@@ -24,7 +24,9 @@ function App(): JSX.Element {
               return
             }
             input.setCustomValidity("")
-            alert("yay")
+            const res = await fetch("/api/v1/hello")
+            const text = await res.text()
+            alert(text)
           }}
         >
           <label class="floating-label">
