@@ -11,7 +11,7 @@ app.get("/api/v1/hello", (c) => {
 
 const geohashing = new Geohashing()
 console.log(
-  "GeoHash:",
+  "GeoHash 2:",
   await geohashing.getGeohash(DateTime.now(), ["51", "-0"])
 )
 
