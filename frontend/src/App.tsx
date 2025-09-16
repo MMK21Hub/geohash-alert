@@ -24,9 +24,15 @@ function App(): JSX.Element {
               return
             }
             input.setCustomValidity("")
-            const res = await fetch("/api/v1/hello")
-            const text = await res.text()
-            alert(text)
+            const res = await fetch("/api/v1/subscribe", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({}),
+            })
+            const data = await res.json()
+            alert(data.error.message)
           }}
         >
           <label class="floating-label">
