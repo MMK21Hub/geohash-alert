@@ -43,7 +43,7 @@ export class Geohashing {
     // TODO: caching
     const jdiaValue = await fetchJDIA(applicableDate)
     if (jdiaValue === null) return null // Geohash not yet known
-    const geohashString = `${applicableDate.toISODate()}-${jdiaValue}`
+    const geohashString = `${givenDate.toISODate()}-${jdiaValue}`
     console.debug("Geohash string:", geohashString)
     const hash = createHash("md5").update(geohashString).digest("hex")
     console.debug("MD5 hash:", hash)
