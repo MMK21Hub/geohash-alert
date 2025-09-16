@@ -10,7 +10,9 @@ app.get("/api/v1/hello", (c) => {
 })
 
 const geohashing = new Geohashing()
-const geoHash = await geohashing.getGeohash(DateTime.now(), ["51", "-0"])
-console.log("GeoHash:", geoHash)
+console.log(
+  "GeoHash:",
+  await geohashing.getGeohash(DateTime.now(), ["51", "-0"])
+)
 
 export default app
