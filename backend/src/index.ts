@@ -74,6 +74,9 @@ app.post("/api/v1/subscribe", async (c) => {
   const subscriptionJSON = await c.req.json()
   const subscription = PushSubscription.parse(subscriptionJSON)
   subscriptions.push(subscription)
+  console.debug(
+    `New subscription received with endpoint ${subscription.endpoint}`
+  )
   return c.json({ success: true })
 })
 
