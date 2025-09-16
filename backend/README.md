@@ -2,19 +2,21 @@
 
 ## Development instructions
 
-To install dependencies:
+1. Install dependencies:
 
-```bash
-bun install
-```
+   ```bash
+   bun install
+   ```
 
-To run (with live reload):
+2. Set up environment variables (copy `.env.example` to `.env` and fill in the values).
 
-```bash
-bun run dev
-```
+3. Run the development server:
 
-Open <http://localhost:3000>
+   ```bash
+   bun run dev
+   ```
+
+4. Open <http://localhost:3000>
 
 ### Debugging
 
