@@ -24,6 +24,16 @@ app.get(
   ),
   async (c) => {
     const { date, lat, lng } = c.req.valid("query")
+    if (lng < -30)
+      return c.json(
+        {
+          error: {
+            name: "NotImplementedError",
+            message: "Locations west of 30°W are not supported yet",
+          },
+        },
+        400
+      )
     const graticule = Geohashing.coordsToGraticule(lat, lng)
     const location = await geohashing.getGeohash(
       DateTime.fromISO(date),
