@@ -6,9 +6,11 @@
   ],
   "dependencies": {
     "envalid": "^8.1.0",
+    "node-schedule": "^2.1.1",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
+    "@types/node-schedule": "^2.1.8",
     "@types/web-push": "^3.6.4"
   }
 }
