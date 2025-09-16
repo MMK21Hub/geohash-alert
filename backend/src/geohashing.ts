@@ -7,7 +7,7 @@ const CROX_JDIA_API_BASE = "http://geo.crox.net/djia"
 
 async function fetchJDIA(date: DateTime): Promise<string | null> {
   const dateString = date.toISODate()
-  const url = new URL(`/${dateString}`, CROX_JDIA_API_BASE)
+  const url = `${CROX_JDIA_API_BASE}/${dateString}`
   const res = await fetch(url)
   const content = await res.text()
   if (res.status === 404) return null
