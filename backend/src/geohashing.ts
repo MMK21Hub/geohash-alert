@@ -78,4 +78,11 @@ export class Geohashing {
     const geohashLon = graticuleLon + "." + lonDecimal.toString().slice(2)
     return [parseFloat(geohashLat), parseFloat(geohashLon)]
   }
+
+  static coordsToGraticule(lat: number, lon: number): Graticule {
+    // This method ensures we preserve negative zero
+    const wholeNumberPartLat = lat.toString().split(".")[0]
+    const wholeNumberPartLon = lon.toString().split(".")[0]
+    return [wholeNumberPartLat, wholeNumberPartLon]
+  }
 }
