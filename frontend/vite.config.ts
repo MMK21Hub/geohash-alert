@@ -4,4 +4,9 @@ import tailwindcss from "@tailwindcss/vite"
 
 export default defineConfig({
   plugins: [voby(), tailwindcss()],
+  server: {
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
+  },
 })
