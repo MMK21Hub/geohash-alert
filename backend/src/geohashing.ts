@@ -28,9 +28,9 @@ function getApplicableDate(givenDate: DateTime): DateTime {
   return givenDate.minus({ days: 1 })
 }
 
-export const NegativeZero = Symbol("NegativeZero")
-export type NegativeZero = typeof NegativeZero
-export type Graticule = [number | NegativeZero, number | NegativeZero]
+/** @example ["51", "-0"] */
+export type Graticule = [string, string]
+export type LatLng = [number, number]
 
 export class Geohashing {
   constructor() {}
@@ -38,8 +38,9 @@ export class Geohashing {
   async getGeohash(
     givenDate: DateTime,
     graticule: Graticule
-  ): Promise<string | null> {
+  ): Promise<LatLng | null> {
     const applicableDate = getApplicableDate(givenDate)
+    // TODO: caching
     const jdiaValue = await fetchJDIA(applicableDate)
     if (jdiaValue === null) return null // Geohash not yet known
     const geohashString = `${applicableDate.toISODate()}-${jdiaValue}`
@@ -54,5 +55,10 @@ export class Geohashing {
       })
       return decimal
     })
+
+    const [graticuleLat, graticuleLon] = graticule
+    const geohashLat = graticuleLat + "." + latDecimal.toString().slice(2)
+    const geohashLon = graticuleLon + "." + lonDecimal.toString().slice(2)
+    return [parseFloat(geohashLat), parseFloat(geohashLon)]
   }
 }
