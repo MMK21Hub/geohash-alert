@@ -11,13 +11,13 @@ function haversineDistance(a: LatLng, b: LatLng) {
   // equatorial mean radius of Earth (in meters)
   const R = 6378137
 
-  function squared(x) {
+  function squared(x: number) {
     return x * x
   }
-  function toRad(x) {
+  function toRad(x: number) {
     return (x * Math.PI) / 180.0
   }
-  function hav(x) {
+  function hav(x: number) {
     return squared(sin(x / 2))
   }
 
