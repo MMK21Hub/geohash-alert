@@ -3,6 +3,7 @@ export const serviceWorkerRegistration =
 
 serviceWorkerRegistration.then(async (reg) => {
   await reg.update()
+  console.debug("Updated service worker registration", reg)
 })
 
 export {}

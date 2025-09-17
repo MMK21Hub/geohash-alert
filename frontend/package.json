@@ -17,10 +17,11 @@
     "voby-vite": "^1.2.5"
   },
   "dependencies": {
+    "@mmk21/geohashing": "workspace:^",
     "@tailwindcss/vite": "^4.1.13",
+    "haversine-distance": "^1.2.4",
     "tailwindcss": "^4.1.13",
-    "voby": "^0.58.1",
-    "@mmk21/geohashing": "workspace:^"
+    "voby": "^0.58.1"
   },
   "private": true
 }

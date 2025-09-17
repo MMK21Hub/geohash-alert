@@ -2,8 +2,9 @@ import { $, useEffect } from "voby"
 import { serviceWorkerRegistration } from "./service-worker-manager"
 import { coordsToGraticule, LatLng } from "@mmk21/geohashing/helpers"
 import TestSubscription from "./TestSubscription"
+import { GeohashSubscriptionInfo } from "./types"
 
-const currentSubscription = $<PushSubscription | null>(
+const currentSubscription = $<GeohashSubscriptionInfo | null>(
   JSON.parse(localStorage.getItem("geohash-alert-subscription") || "null")
 )
 useEffect(() => {
@@ -13,7 +14,17 @@ useEffect(() => {
   )
 })
 
-async function subscribeToAlerts(homeCoords: LatLng) {
+async function subscribeToAlerts({
+  homeCoords,
+  timeZone,
+  time,
+  maxDistance,
+}: {
+  homeCoords: LatLng
+  time: string
+  timeZone: string
+  maxDistance: number
+}) {
   const sw = await serviceWorkerRegistration
   const homeGraticule = coordsToGraticule(...homeCoords)
   const subscription = await sw.pushManager.subscribe({
@@ -37,13 +48,18 @@ async function subscribeToAlerts(homeCoords: LatLng) {
     console.error("Failed to subscribe, API request failed", data)
     return alert(`Failed to subscribe: ${data.error.message}`)
   }
-  currentSubscription(subscription)
+  currentSubscription({
+    subscription,
+    homeCoords,
+    time,
+    timeZone,
+    maxDistance,
+  })
   alert("Success! You have subscribed to geohash alerts.")
 }
 
 function App(): JSX.Element {
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-
   return (
     <div>
       <div class="navbar bg-base-100 shadow-sm">
@@ -55,18 +71,27 @@ function App(): JSX.Element {
         <form
           onSubmit={async (e) => {
             e.preventDefault()
-            const input = document.getElementById("home-coords")
-            if (!(input instanceof HTMLInputElement))
-              throw new Error("Failed to find input element")
-            const coords = input.value.split(",").map((c) => parseFloat(c))
+            const homeInput = document.getElementById("home-coords")
+            if (!(homeInput instanceof HTMLInputElement))
+              throw new Error("Failed to find home coordinates input element")
+            const coords = homeInput.value.split(",").map((c) => parseFloat(c))
             if (coords.length !== 2 || coords.some((c) => isNaN(c))) {
-              input.setCustomValidity(
+              homeInput.setCustomValidity(
                 "Please enter valid coordinates (in the format 51.50741, 0.12782)"
               )
-              input.reportValidity()
+              homeInput.reportValidity()
               return
             }
-            subscribeToAlerts(coords as LatLng)
+            const timeInput = document.getElementById("notification-time")
+            if (!(timeInput instanceof HTMLInputElement))
+              throw new Error("Failed to find time input element")
+            const time = timeInput.value
+            subscribeToAlerts({
+              homeCoords: coords as LatLng,
+              timeZone,
+              time,
+              maxDistance: Infinity,
+            })
             return false
           }}
         >
@@ -105,7 +130,7 @@ function App(): JSX.Element {
         </form>
         {() => {
           const sub = currentSubscription()
-          return sub && <TestSubscription subscription={sub} />
+          return sub && <TestSubscription subscription={sub.subscription} />
         }}
       </main>
     </div>
