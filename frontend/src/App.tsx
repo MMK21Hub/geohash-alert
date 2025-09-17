@@ -148,6 +148,11 @@ function App(): JSX.Element {
           class="space-y-8"
         >
           <div>
+            <p class="text-md text-base-content/80 mb-4">
+              Where do you want to get notifications for? Exact coordinates are
+              stored securely in your browser, and approximate coordinates are
+              sent to the server.
+            </p>
             <label class="floating-label">
               <span>Enter your home coordinates</span>
               <input
@@ -164,11 +169,11 @@ function App(): JSX.Element {
             </label>
           </div>
           <div>
-            <div class="text-md text-base-content/80">
+            <p class="text-md text-base-content/80 mb-4">
               When would you like to receive daily alerts? They will be
               scheduled in your local timezone ({timeZone}).
-            </div>
-            <label class="input w-full min-w-[15em] max-w-sm mt-4">
+            </p>
+            <label class="input w-full min-w-[15em] max-w-sm">
               <span class="label">Notification time</span>
               <input
                 type="time"
