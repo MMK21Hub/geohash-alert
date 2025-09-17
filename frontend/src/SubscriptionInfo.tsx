@@ -11,9 +11,7 @@ export default function SubscriptionInfo({
   return (
     <div class="card bg-base-100 shadow-md mb-4">
       <div class="card-body p-4">
-        <h2 class="card-title text-lg font-semibold mb-2">
-          Subscribed to Geohash Alerts
-        </h2>
+        <h2 class="card-title text-lg font-semibold mb-2">Subscription info</h2>
         <ul class="text-sm space-y-1">
           <li>
             <span class="font-medium">Home coordinates:</span> {lat.toFixed(5)},{" "}
