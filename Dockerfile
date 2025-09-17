@@ -8,11 +8,17 @@ WORKDIR /usr/src/app
 FROM base AS install
 RUN mkdir -p /temp/dev
 COPY package.json bun.lock /temp/dev/
+COPY backend/package.json /temp/dev/backend/package.json
+COPY frontend/package.json /temp/dev/frontend/package.json
+COPY geohashing/package.json /temp/dev/geohashing/package.json
 RUN cd /temp/dev && bun install --frozen-lockfile
 
 # install with --production (exclude devDependencies)
 RUN mkdir -p /temp/prod
 COPY package.json bun.lock /temp/prod/
+COPY backend/package.json /temp/dev/backend/package.json
+COPY frontend/package.json /temp/dev/frontend/package.json
+COPY geohashing/package.json /temp/dev/geohashing/package.json
 RUN cd /temp/prod && bun install --frozen-lockfile --production
 
 # copy node_modules from temp directory
@@ -31,6 +37,7 @@ COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/backend/src ./backend/src
 COPY --from=prerelease /usr/src/app/backend/package.json ./backend/package.json
 COPY --from=prerelease /usr/src/app/frontend/dist ./frontend/dist
+COPY --from=prerelease /usr/src/app/geohashing ./geohashing
 COPY --from=prerelease /usr/src/app/package.json .
 
 # run the app
