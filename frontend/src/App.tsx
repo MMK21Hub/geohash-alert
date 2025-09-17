@@ -1,6 +1,17 @@
-import { $ } from "voby"
+import { $, useEffect } from "voby"
 import { serviceWorkerRegistration } from "./service-worker-manager"
 import { coordsToGraticule, LatLng } from "@mmk21/geohashing/helpers"
+import TestSubscription from "./TestSubscription"
+
+const currentSubscription = $<PushSubscription | null>(
+  JSON.parse(localStorage.getItem("geohash-alert-subscription") || "null")
+)
+useEffect(() => {
+  localStorage.setItem(
+    "geohash-alert-subscription",
+    JSON.stringify(currentSubscription())
+  )
+})
 
 async function subscribeToAlerts(homeCoords: LatLng) {
   const sw = await serviceWorkerRegistration
@@ -26,7 +37,8 @@ async function subscribeToAlerts(homeCoords: LatLng) {
     console.error("Failed to subscribe, API request failed", data)
     return alert(`Failed to subscribe: ${data.error.message}`)
   }
-  alert("Subscribed :D")
+  currentSubscription(subscription)
+  alert("Success! You have subscribed to geohash alerts.")
 }
 
 function App(): JSX.Element {
@@ -91,6 +103,10 @@ function App(): JSX.Element {
             Subscribe to alerts
           </button>
         </form>
+        {() => {
+          const sub = currentSubscription()
+          return sub && <TestSubscription subscription={sub} />
+        }}
       </main>
     </div>
   )
