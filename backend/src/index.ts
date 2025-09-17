@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import { Geohashing } from "./geohashing"
+import { Geohashing } from "@mmk21/geohashing"
 import { DateTime } from "luxon"
 import { zValidator } from "@hono/zod-validator"
 import { setVapidDetails, type PushSubscription } from "web-push"

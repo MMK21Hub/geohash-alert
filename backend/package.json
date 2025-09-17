@@ -5,7 +5,8 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",
-    "hono": "^4.9.7"
+    "hono": "^4.9.7",
+    "@mmk21/geohashing": "workspace:^"
   },
   "devDependencies": {
     "@types/bun": "latest"
