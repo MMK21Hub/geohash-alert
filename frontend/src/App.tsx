@@ -170,6 +170,22 @@ function App(): JSX.Element {
           </div>
           <div>
             <p class="text-md text-base-content/80 mb-4">
+              How close should a geohash be for you to receive an alert?
+            </p>
+            <label class="input w-full min-w-[15em] max-w-sm">
+              <span class="label">Maximum distance</span>
+              <input
+                type="number"
+                id="max-distance"
+                required
+                value="5"
+                class=""
+              />
+              <span class="label">km</span>
+            </label>
+          </div>
+          <div>
+            <p class="text-md text-base-content/80 mb-4">
               When would you like to receive daily alerts? They will be
               scheduled in your local timezone ({timeZone}).
             </p>
