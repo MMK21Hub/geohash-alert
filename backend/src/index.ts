@@ -31,6 +31,9 @@ const PushSubscription = z.object({
   }),
 })
 
+const Lat = z.coerce.number().min(-90).max(90)
+const Lng = z.coerce.number().min(-180).max(180)
+
 // TODO: We need a database :p
 const subscriptions: {
   subscription: PushSubscription
@@ -47,8 +50,8 @@ app.get(
     "query",
     z.object({
       date: z.iso.date(),
-      lat: z.coerce.number().min(-90).max(90),
-      lng: z.coerce.number().min(-180).max(180),
+      lat: Lat,
+      lng: Lng,
     })
   ),
   async (c) => {
@@ -79,12 +82,8 @@ app.post(
     "json",
     z.object({
       subscription: PushSubscription,
-      homeGraticule: z.tuple([z.string(), z.string()]).refine((coords) => {
-        for (const coordStr of coords) {
-          const coord = parseInt(coordStr)
-          if (isNaN(coord)) return false
-          if (Math.abs(coord) > 180) return false
-        }
+      homeGraticule: z.tuple([z.string(), z.string()]).refine(([lat, lng]) => {
+        Lat.safeParse(lat).success && Lng.safeParse(lng).success
       }),
     })
   ),
