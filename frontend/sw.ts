@@ -58,6 +58,9 @@ function getSubscriptionInfo(): Promise<GeohashSubscriptionInfo> {
 }
 
 async function handlePush(event: PushEvent) {
+  self.registration.showNotification("Push received!", {
+    body: "This proves the SW is working",
+  })
   const data: PushMessage = event.data?.json()
   const selfRegistration = await getSelfRegistration()
   console.log("Registration", selfRegistration, "sending notification", data)
