@@ -18,11 +18,9 @@
       "dependencies": {
         "@hono/zod-validator": "^0.7.2",
         "hono": "^4.9.7",
-        "luxon": "^3.7.2",
       },
       "devDependencies": {
         "@types/bun": "latest",
-        "@types/luxon": "^3.7.1",
       },
     },
     "frontend": {
@@ -38,6 +36,19 @@
         "typescript": "^5.9.2",
         "vite": "^7.1.5",
         "voby-vite": "^1.2.5",
+      },
+    },
+    "geohashing": {
+      "name": "@mmk21/geohashing",
+      "dependencies": {
+        "luxon": "^3.7.2",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+        "@types/luxon": "^3.7.1",
+      },
+      "peerDependencies": {
+        "typescript": "^5",
       },
     },
   },
@@ -107,6 +118,8 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
+
+    "@mmk21/geohashing": ["@mmk21/geohashing@workspace:geohashing"],
 
     "@rollup/rollup-android-arm-eabi": ["@rollup/rollup-android-arm-eabi@4.50.2", "", { "os": "android", "cpu": "arm" }, "sha512-uLN8NAiFVIRKX9ZQha8wy6UUs06UNSZ32xj6giK/rmMXAgKahwExvK6SsmgU5/brh4w/nSgj8e0k3c1HBQpa0A=="],
 

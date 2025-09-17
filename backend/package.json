@@ -5,11 +5,9 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",
-    "hono": "^4.9.7",
-    "luxon": "^3.7.2"
+    "hono": "^4.9.7"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/luxon": "^3.7.1"
+    "@types/bun": "latest"
   }
 }
