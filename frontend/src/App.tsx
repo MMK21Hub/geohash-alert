@@ -6,6 +6,7 @@ import { GeohashSubscriptionInfo } from "./types"
 import { currentSubscription } from "./subscription-manager"
 import Subscribe from "./Subscribe"
 import SubscriptionInfo from "./SubscriptionInfo"
+import Unsubscribe from "./Unsubscribe"
 
 function App(): JSX.Element {
   const sub = currentSubscription()
@@ -21,6 +22,7 @@ function App(): JSX.Element {
           sub ? (
             <>
               <SubscriptionInfo subscription={sub} />
+              <Unsubscribe />
               <TestSubscription subscription={sub.subscription} />
             </>
           ) : (
