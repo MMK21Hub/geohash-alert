@@ -5,7 +5,6 @@ import SubscriptionInfo from "./SubscriptionInfo"
 import Unsubscribe from "./Unsubscribe"
 
 function App(): JSX.Element {
-  const sub = currentSubscription()
   return (
     <div>
       <div class="navbar bg-base-100 shadow-sm">
@@ -14,8 +13,9 @@ function App(): JSX.Element {
         </a>
       </div>
       <main class="py-6 px-4 max-w-3xl mx-auto">
-        {() =>
-          sub ? (
+        {() => {
+          const sub = currentSubscription()
+          return sub ? (
             <>
               <SubscriptionInfo subscription={sub} />
               <Unsubscribe />
@@ -24,7 +24,7 @@ function App(): JSX.Element {
           ) : (
             <Subscribe />
           )
-        }
+        }}
       </main>
     </div>
   )
