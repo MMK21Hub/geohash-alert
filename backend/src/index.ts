@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import { Geohashing } from "@mmk21/geohashing"
+import { Geohashing, type Graticule } from "@mmk21/geohashing"
 import { DateTime } from "luxon"
 import { zValidator } from "@hono/zod-validator"
 import { setVapidDetails, type PushSubscription } from "web-push"
@@ -32,7 +32,10 @@ const PushSubscription = z.object({
 })
 
 // TODO: We need a database :p
-const subscriptions: PushSubscription[] = []
+const subscriptions: {
+  subscription: PushSubscription
+  homeGraticule: Graticule
+}[] = []
 
 app.get("/api/v1/hello", (c) => {
   return c.text("Hello Hono!")
@@ -72,7 +75,19 @@ app.get(
 
 app.post(
   "/api/v1/subscribe",
-  zValidator("json", PushSubscription),
+  zValidator(
+    "json",
+    z.object({
+      subscription: PushSubscription,
+      homeGraticule: z.tuple([z.string(), z.string()]).refine((coords) => {
+        for (const coordStr of coords) {
+          const coord = parseInt(coordStr)
+          if (isNaN(coord)) return false
+          if (Math.abs(coord) > 180) return false
+        }
+      }),
+    })
+  ),
   async (c) => {
     const subscription = c.req.valid("json")
     subscriptions.push(subscription)
