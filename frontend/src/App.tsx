@@ -15,8 +15,27 @@ useEffect(() => {
     JSON.stringify(currentSubscription())
   )
 })
-subscriptionUpdateChannel.addEventListener("message", async (event) => {
-  const newSubscription = event.data as PushSubscription
+// subscriptionUpdateChannel.addEventListener("message", async (event) => {
+//   const newSubscription = event.data as PushSubscription
+// note: this should do the same thing as the thing in navigator.serviceWorker.ready.then below
+// })
+getSubscriptionInfoChannel.addEventListener("message", (event) => {
+  getSubscriptionInfoChannel.postMessage(JSON.stringify(currentSubscription()))
+})
+
+// When the browser updates the subscription URL in the background
+navigator.serviceWorker.ready.then(async (registration) => {
+  const newSubscription = await registration.pushManager.getSubscription()
+  const currentSub = currentSubscription()?.subscription
+  if (!currentSub)
+    return console.warn("No stored subscription, not checking for update")
+  if (!newSubscription)
+    return console.warn(
+      "No subscription stored on PushManager, not checking for update"
+    )
+  if (newSubscription.endpoint === currentSub.endpoint)
+    return console.debug("Subscription endpoint unchanged, all is good")
+  console.info("Subscription endpoint changed, updating stored subscription")
   const oldSubscriptionInfo = currentSubscription()
   if (!oldSubscriptionInfo)
     return console.warn(
@@ -34,9 +53,6 @@ subscriptionUpdateChannel.addEventListener("message", async (event) => {
     return console.error("Failed to update subscription on server", e)
   }
   currentSubscription(oldSubscriptionInfo)
-})
-getSubscriptionInfoChannel.addEventListener("message", (event) => {
-  getSubscriptionInfoChannel.postMessage(JSON.stringify(currentSubscription()))
 })
 
 async function sendSubscriptionToServer(info: GeohashSubscriptionInfo) {

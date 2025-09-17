@@ -87,6 +87,7 @@ const subscriptionUpdateChannel = new BroadcastChannel("subscription-updates")
 const getSubscriptionInfoChannel = new BroadcastChannel("get-subscription-info")
 
 async function handleSubscriptionChange(event: PushSubscriptionChangeEvent) {
+  console.log("Subscription expired, renewing", event)
   subscriptionUpdateChannel.postMessage(event.newSubscription)
 }
 
