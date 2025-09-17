@@ -19,7 +19,8 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",
     "tailwindcss": "^4.1.13",
-    "voby": "^0.58.1"
+    "voby": "^0.58.1",
+    "@mmk21/geohashing": "workspace:^"
   },
   "private": true
 }
