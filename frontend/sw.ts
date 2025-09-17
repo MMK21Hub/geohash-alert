@@ -1,7 +1,33 @@
 import type { LatLng } from "@mmk21/geohashing"
 import type { PushMessage } from "../backend/src/message"
-import haversine from "haversine-distance"
 import type { GeohashSubscriptionInfo } from "./src/types"
+
+// Source: https://github.com/dcousens/haversine-distance, licenced under MIT by Daniel Cousens
+function haversineDistance(a: LatLng, b: LatLng) {
+  const atan2 = Math.atan2
+  const cos = Math.cos
+  const sin = Math.sin
+  const sqrt = Math.sqrt
+  // equatorial mean radius of Earth (in meters)
+  const R = 6378137
+
+  function squared(x) {
+    return x * x
+  }
+  function toRad(x) {
+    return (x * Math.PI) / 180.0
+  }
+  function hav(x) {
+    return squared(sin(x / 2))
+  }
+
+  const aLat = toRad(a[1])
+  const bLat = toRad(b[1])
+  const aLng = toRad(a[0])
+  const bLng = toRad(b[0])
+  const ht = hav(bLat - aLat) + cos(aLat) * cos(bLat) * hav(bLng - aLng)
+  return 2 * R * atan2(sqrt(ht), sqrt(1 - ht))
+}
 
 /// <reference lib="webworker" />
 self.addEventListener("push", (event: PushEvent) =>
@@ -19,7 +45,10 @@ async function handlePush(event: PushEvent) {
   const subscriptionInfo: GeohashSubscriptionInfo = JSON.parse(
     localStorage.getItem("geohash-alert-subscription")
   )
-  const distance = haversine(subscriptionInfo.homeCoords, data.geohash.location)
+  const distance = haversineDistance(
+    subscriptionInfo.homeCoords,
+    data.geohash.location
+  )
   const title = data.isTest
     ? "Geohash Alert (manually triggered)"
     : "Nearby geohash"
