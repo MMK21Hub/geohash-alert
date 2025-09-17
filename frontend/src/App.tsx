@@ -7,12 +7,52 @@ import { GeohashSubscriptionInfo } from "./types"
 const currentSubscription = $<GeohashSubscriptionInfo | null>(
   JSON.parse(localStorage.getItem("geohash-alert-subscription") || "null")
 )
+const subscriptionUpdateChannel = new BroadcastChannel("subscription-updates")
 useEffect(() => {
   localStorage.setItem(
     "geohash-alert-subscription",
     JSON.stringify(currentSubscription())
   )
 })
+subscriptionUpdateChannel.addEventListener("message", async (event) => {
+  const newSubscription = event.data as PushSubscription
+  const oldSubscriptionInfo = currentSubscription()
+  if (!oldSubscriptionInfo)
+    return console.warn(
+      "Failed to update subscription: no previous subscription in memory"
+    )
+  oldSubscriptionInfo.subscription = newSubscription
+  console.debug(
+    "Browser updated subscription in the background, sending latest subscription to server.",
+    "New subscription:",
+    newSubscription
+  )
+  try {
+    await sendSubscriptionToServer(oldSubscriptionInfo)
+  } catch (e) {
+    return console.error("Failed to update subscription on server", e)
+  }
+  currentSubscription(oldSubscriptionInfo)
+})
+
+async function sendSubscriptionToServer(info: GeohashSubscriptionInfo) {
+  const homeGraticule = coordsToGraticule(...info.homeCoords)
+  const res = await fetch("/api/v1/subscribe", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      subscription: info.subscription,
+      homeGraticule,
+    }),
+  })
+  const data = await res.json()
+  if (!res.ok) {
+    console.error("Failed to subscribe, API request failed", data)
+    throw new Error(data.error?.message)
+  }
+}
 
 async function subscribeToAlerts({
   homeCoords,
@@ -26,35 +66,26 @@ async function subscribeToAlerts({
   maxDistance: number
 }) {
   const sw = await serviceWorkerRegistration
-  const homeGraticule = coordsToGraticule(...homeCoords)
   const subscription = await sw.pushManager.subscribe({
     userVisibleOnly: true,
     // TODO: env
     applicationServerKey:
       "BOaKJCR8niTjyJm8Bcuh4GZKdmGLd4rOgH5a63xYmDWAvSRKK4F4ednFKfm92Qnm6vXmDJMsdr-tfGM7thl2EBU",
   })
-  const res = await fetch("/api/v1/subscribe", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      subscription,
-      homeGraticule,
-    }),
-  })
-  const data = await res.json()
-  if (!res.ok) {
-    console.error("Failed to subscribe, API request failed", data)
-    return alert(`Failed to subscribe: ${data.error.message}`)
-  }
-  currentSubscription({
+
+  const subscriptionInfo: GeohashSubscriptionInfo = {
     subscription,
     homeCoords,
     time,
     timeZone,
     maxDistance,
-  })
+  }
+  try {
+    await sendSubscriptionToServer(subscriptionInfo)
+  } catch (e) {
+    return alert(`Failed to subscribe: ${e}`)
+  }
+  currentSubscription(subscriptionInfo)
   alert("Success! You have subscribed to geohash alerts.")
 }
 

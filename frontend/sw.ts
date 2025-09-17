@@ -63,16 +63,10 @@ async function handlePush(event: PushEvent) {
   })
 }
 
+const subscriptionUpdateChannel = new BroadcastChannel("subscription-updates")
+
 async function handleSubscriptionChange(event: PushSubscriptionChangeEvent) {
-  const oldSubscriptionInfo = JSON.parse(
-    localStorage.getItem("geohash-alert-subscription")
-  ) as GeohashSubscriptionInfo
-  if (!oldSubscriptionInfo) return console.warn("No subscription info found")
-  oldSubscriptionInfo.subscription = event.newSubscription
-  localStorage.setItem(
-    "geohash-alert-subscription",
-    JSON.stringify(oldSubscriptionInfo)
-  )
+  subscriptionUpdateChannel.postMessage(event.newSubscription)
 }
 
 self.addEventListener(
