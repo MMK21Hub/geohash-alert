@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": [
     "backend",
-    "frontend"
+    "frontend",
+    "geohashing"
   ],
   "dependencies": {
     "envalid": "^8.1.0",
