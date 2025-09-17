@@ -145,6 +145,7 @@ app.post(
           }
         : undefined,
     }
+    console.debug("Sending test notification", message)
     await sendNotification(entry.subscription, JSON.stringify(message))
     return c.json({ success: true })
   }

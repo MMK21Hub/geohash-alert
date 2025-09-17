@@ -62,3 +62,21 @@ async function handlePush(event: PushEvent) {
     icon: "/icon.png",
   })
 }
+
+async function handleSubscriptionChange(event: PushSubscriptionChangeEvent) {
+  const oldSubscriptionInfo = JSON.parse(
+    localStorage.getItem("geohash-alert-subscription")
+  ) as GeohashSubscriptionInfo
+  if (!oldSubscriptionInfo) return console.warn("No subscription info found")
+  oldSubscriptionInfo.subscription = event.newSubscription
+  localStorage.setItem(
+    "geohash-alert-subscription",
+    JSON.stringify(oldSubscriptionInfo)
+  )
+}
+
+self.addEventListener(
+  "pushsubscriptionchange",
+  (event: PushSubscriptionChangeEvent) =>
+    event.waitUntil(handleSubscriptionChange(event))
+)
