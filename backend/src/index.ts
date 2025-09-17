@@ -1,5 +1,9 @@
 import { Hono } from "hono"
-import { Geohashing, type Graticule } from "@mmk21/geohashing"
+import {
+  coordsToGraticule,
+  Geohashing,
+  type Graticule,
+} from "@mmk21/geohashing"
 import { DateTime } from "luxon"
 import { zValidator } from "@hono/zod-validator"
 import { setVapidDetails, type PushSubscription } from "web-push"
@@ -67,7 +71,7 @@ app.get(
         },
         400
       )
-    const graticule = Geohashing.coordsToGraticule(lat, lng)
+    const graticule = coordsToGraticule(lat, lng)
     const location = await geohashing.getGeohash(
       DateTime.fromISO(date),
       graticule
