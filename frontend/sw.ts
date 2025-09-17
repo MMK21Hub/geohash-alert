@@ -38,9 +38,18 @@ function formatCoords(coords: LatLng): string {
   return `${coords[0].toFixed(6)}, ${coords[1].toFixed(6)}`
 }
 
+async function getSelfRegistration() {
+  try {
+    return await navigator.serviceWorker.getRegistration("/")
+  } catch {
+    // @ts-ignore ???!
+    return self.registration
+  }
+}
+
 async function handlePush(event: PushEvent) {
   const data: PushMessage = event.data?.json()
-  const selfRegistration = await navigator.serviceWorker.getRegistration("/")
+  const selfRegistration = await getSelfRegistration()
   console.log("Registration", selfRegistration, "sending notification", data)
   const subscriptionInfo: GeohashSubscriptionInfo = JSON.parse(
     localStorage.getItem("geohash-alert-subscription")
