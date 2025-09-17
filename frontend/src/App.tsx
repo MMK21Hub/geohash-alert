@@ -44,24 +44,16 @@ function App(): JSX.Element {
             const input = document.getElementById("home-coords")
             if (!(input instanceof HTMLInputElement))
               throw new Error("Failed to find input element")
-            const coords = input.value.split(",").map((x) => x.trim())
-            if (coords.length !== 2 || coords.some((x) => isNaN(Number(x)))) {
+            const coords = input.value.split(",").map((c) => parseFloat(c))
+            if (coords.length !== 2 || coords.some((c) => isNaN(c))) {
               input.setCustomValidity(
                 "Please enter valid coordinates (in the format 51.50741, 0.12782)"
               )
               input.reportValidity()
               return
             }
-            input.setCustomValidity("")
-            const res = await fetch("/api/v1/subscribe", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({}),
-            })
-            const data = await res.json()
-            alert(data.error.message)
+            subscribeToAlerts(coords as LatLng)
+            return false
           }}
         >
           <label class="floating-label">
