@@ -8,6 +8,7 @@ const currentSubscription = $<GeohashSubscriptionInfo | null>(
   JSON.parse(localStorage.getItem("geohash-alert-subscription") || "null")
 )
 const subscriptionUpdateChannel = new BroadcastChannel("subscription-updates")
+const getSubscriptionInfoChannel = new BroadcastChannel("get-subscription-info")
 useEffect(() => {
   localStorage.setItem(
     "geohash-alert-subscription",
@@ -33,6 +34,9 @@ subscriptionUpdateChannel.addEventListener("message", async (event) => {
     return console.error("Failed to update subscription on server", e)
   }
   currentSubscription(oldSubscriptionInfo)
+})
+getSubscriptionInfoChannel.addEventListener("message", (event) => {
+  getSubscriptionInfoChannel.postMessage(JSON.stringify(currentSubscription()))
 })
 
 async function sendSubscriptionToServer(info: GeohashSubscriptionInfo) {

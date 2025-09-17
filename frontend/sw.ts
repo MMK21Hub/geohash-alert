@@ -47,13 +47,21 @@ async function getSelfRegistration() {
   }
 }
 
+function getSubscriptionInfo(): Promise<GeohashSubscriptionInfo> {
+  // FIXME this is so so terribly jank, I hate it
+  return new Promise((resolve) => {
+    getSubscriptionInfoChannel.addEventListener("message", (event) => {
+      resolve(JSON.parse(event.data) as GeohashSubscriptionInfo)
+    })
+    getSubscriptionInfoChannel.postMessage("get")
+  })
+}
+
 async function handlePush(event: PushEvent) {
   const data: PushMessage = event.data?.json()
   const selfRegistration = await getSelfRegistration()
   console.log("Registration", selfRegistration, "sending notification", data)
-  const subscriptionInfo: GeohashSubscriptionInfo = JSON.parse(
-    localStorage.getItem("geohash-alert-subscription")
-  )
+  const subscriptionInfo = await getSubscriptionInfo()
   const distance = haversineDistance(
     subscriptionInfo.homeCoords,
     data.geohash.location
@@ -73,6 +81,7 @@ async function handlePush(event: PushEvent) {
 }
 
 const subscriptionUpdateChannel = new BroadcastChannel("subscription-updates")
+const getSubscriptionInfoChannel = new BroadcastChannel("get-subscription-info")
 
 async function handleSubscriptionChange(event: PushSubscriptionChangeEvent) {
   subscriptionUpdateChannel.postMessage(event.newSubscription)
