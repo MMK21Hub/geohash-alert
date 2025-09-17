@@ -6,6 +6,10 @@ export default function SubscriptionInfo({
   subscription: GeohashSubscriptionInfo
 }): JSX.Element {
   const { homeCoords, time, timeZone, maxDistance } = subscription
+  const maxDistanceDisplay =
+    maxDistance === Infinity
+      ? "at any distance"
+      : `${maxDistance / 1000} km or closer`
   // LatLng is a tuple: [number, number]
   const [lat, lng] = homeCoords
   return (
@@ -14,15 +18,15 @@ export default function SubscriptionInfo({
         <h2 class="card-title text-lg font-semibold mb-2">Subscription info</h2>
         <ul class="text-sm space-y-1">
           <li>
-            <span class="font-medium">Home coordinates:</span> {lat.toFixed(5)},{" "}
+            <span class="">Home coordinates:</span> {lat.toFixed(5)},{" "}
             {lng.toFixed(5)}
           </li>
           <li>
-            <span class="font-medium">Alert time:</span> {time}{" "}
+            <span class="">Alerts are scheduled for {time} </span>
             <span class="text-xs text-gray-500">({timeZone})</span>
           </li>
           <li>
-            <span class="font-medium">Max distance:</span> {maxDistance} km
+            <span class="">Alerting for geohashes {maxDistanceDisplay}</span>
           </li>
         </ul>
       </div>
