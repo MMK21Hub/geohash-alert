@@ -138,11 +138,17 @@ function App(): JSX.Element {
             if (!(timeInput instanceof HTMLInputElement))
               throw new Error("Failed to find time input element")
             const time = timeInput.value
+            const maxDistanceInput = document.getElementById("max-distance")
+            if (!(maxDistanceInput instanceof HTMLInputElement))
+              throw new Error("Failed to find max distance input element")
+            const maxDistance = noDistanceLimit()
+              ? Infinity
+              : maxDistanceInput.valueAsNumber * 1000
             subscribeToAlerts({
               homeCoords: coords as LatLng,
               timeZone,
               time,
-              maxDistance: Infinity,
+              maxDistance,
             })
             return false
           }}
@@ -179,6 +185,8 @@ function App(): JSX.Element {
                 type="number"
                 id="max-distance"
                 required
+                min="0"
+                step="0.5"
                 value="5"
                 class=""
                 disabled={noDistanceLimit}
