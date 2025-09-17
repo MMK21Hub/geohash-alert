@@ -1,13 +1,5 @@
-import { DateTime, Settings as LuxonSettings } from "luxon"
+import { DateTime } from "luxon"
 import { createHash } from "node:crypto"
-
-LuxonSettings.throwOnInvalid = true
-
-declare module "luxon" {
-  interface TSSettings {
-    throwOnInvalid: true
-  }
-}
 
 /** @see https://geohashing.site/geohashing/Dow_Jones_Industrial_Average */
 // Alternative servers: www1.geo.crox.net or www2.geo.crox.net
@@ -26,7 +18,9 @@ async function fetchDJIA(date: DateTime): Promise<string | null> {
   return content.trim()
 }
 
-function getApplicableDate(givenDate: DateTime): DateTime {
+function getApplicableDate(givenDate: DateTime): DateTime<true> {
+  if (!givenDate.isValid)
+    throw new Error(`Invalid date provided: ${givenDate.invalidReason}`)
   // TODO: support holidays, 30W rule, etc
   if (givenDate.weekday >= 6) {
     // Use Friday's closing value during the weekend
@@ -44,7 +38,7 @@ export class Geohashing {
   djiaCache: Map<string, string> = new Map()
   constructor() {}
 
-  async getDJIA(date: DateTime): Promise<string | null> {
+  async getDJIA(date: DateTime<true>): Promise<string | null> {
     const isoDate = date.toISODate()
     const cached = this.djiaCache.get(isoDate)
     if (cached) return cached
