@@ -9,11 +9,13 @@ import { zValidator } from "@hono/zod-validator"
 import {
   sendNotification,
   setVapidDetails,
+  WebPushError,
   type PushSubscription,
 } from "web-push"
 import * as z from "zod/v4"
 import { cleanEnv, str } from "envalid"
 import type { AlertMessage, TestAlertMessage } from "./message"
+import { except } from "hono/combine"
 
 const env = cleanEnv(process.env, {
   VAPID_PUBLIC_KEY: str(),
@@ -145,10 +147,29 @@ app.post(
           }
         : undefined,
     }
-    console.debug("Sending test notification", message)
-    await sendNotification(entry.subscription, JSON.stringify(message))
+    console.debug("Sending test notification to", entry.subscription.endpoint)
+    try {
+      await sendNotification(entry.subscription, JSON.stringify(message))
+    } catch (e) {
+      if (!(e instanceof WebPushError)) throw e
+      const errorDetail = tryJSONParse(e.body)
+      const errorBodyStr =
+        errorDetail && "message" in errorDetail ? errorDetail.message : null
+      console.error(
+        `Failed to send test notification: HTTP ${e.statusCode}:`,
+        errorBodyStr || e.body || e
+      )
+    }
     return c.json({ success: true })
   }
 )
 
 export default app
+
+function tryJSONParse(str: string): any | null {
+  try {
+    return JSON.parse(str)
+  } catch {
+    return null
+  }
+}
