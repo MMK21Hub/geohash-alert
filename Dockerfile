@@ -16,9 +16,9 @@ RUN cd /temp/dev && bun install --frozen-lockfile
 # install with --production (exclude devDependencies)
 RUN mkdir -p /temp/prod
 COPY package.json bun.lock /temp/prod/
-COPY backend/package.json /temp/dev/backend/package.json
-COPY frontend/package.json /temp/dev/frontend/package.json
-COPY geohashing/package.json /temp/dev/geohashing/package.json
+COPY backend/package.json /temp/prod/backend/package.json
+COPY frontend/package.json /temp/prod/frontend/package.json
+COPY geohashing/package.json /temp/prod/geohashing/package.json
 RUN cd /temp/prod && bun install --frozen-lockfile --production
 
 # copy node_modules from temp directory
