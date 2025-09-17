@@ -16,6 +16,7 @@ import * as z from "zod/v4"
 import { cleanEnv, str } from "envalid"
 import type { AlertMessage, TestAlertMessage } from "./message"
 import { except } from "hono/combine"
+import { serveStatic } from "hono/bun"
 
 const env = cleanEnv(process.env, {
   VAPID_PUBLIC_KEY: str(),
@@ -163,6 +164,17 @@ app.post(
     return c.json({ success: true })
   }
 )
+
+const frontendDistPath = process.env.FRONTEND_DIST
+if (frontendDistPath) {
+  console.log(`Serving frontend from ${frontendDistPath}`)
+  app.use(
+    "*",
+    serveStatic({
+      root: frontendDistPath,
+    })
+  )
+}
 
 export default app
 
