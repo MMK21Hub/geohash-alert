@@ -145,39 +145,45 @@ function App(): JSX.Element {
             })
             return false
           }}
+          class="space-y-8"
         >
-          <label class="floating-label">
-            <span>Enter your home coordinates</span>
-            <input
-              type="text"
-              placeholder="Enter your home coordinates, e.g. 51.50741, 0.12782"
-              id="home-coords"
-              required
-              class="input input-md w-full max-w-sm"
-              onInput={(e) => {
-                const input = e.target as HTMLInputElement
-                input.setCustomValidity("")
-              }}
-            />
-          </label>
-          <div class="mt-8 text-md text-base-content/80">
-            When would you like to receive daily alerts? They will be scheduled
-            in your local timezone ({timeZone}).
+          <div>
+            <label class="floating-label">
+              <span>Enter your home coordinates</span>
+              <input
+                type="text"
+                placeholder="Enter your home coordinates, e.g. 51.50741, 0.12782"
+                id="home-coords"
+                required
+                class="input input-md w-full max-w-sm"
+                onInput={(e) => {
+                  const input = e.target as HTMLInputElement
+                  input.setCustomValidity("")
+                }}
+              />
+            </label>
           </div>
-          <label class="input w-full min-w-[15em] max-w-sm mt-4">
-            <span class="label">Notification time</span>
-            <input
-              type="time"
-              id="notification-time"
-              required
-              value="07:15"
-              class=""
-            />
-          </label>
-          <br />
-          <button type="submit" class="btn mt-8">
-            Subscribe to alerts
-          </button>
+          <div>
+            <div class="text-md text-base-content/80">
+              When would you like to receive daily alerts? They will be
+              scheduled in your local timezone ({timeZone}).
+            </div>
+            <label class="input w-full min-w-[15em] max-w-sm mt-4">
+              <span class="label">Notification time</span>
+              <input
+                type="time"
+                id="notification-time"
+                required
+                value="07:15"
+                class=""
+              />
+            </label>
+          </div>
+          <div>
+            <button type="submit" class="btn">
+              Subscribe to alerts
+            </button>
+          </div>
         </form>
         {() => {
           const sub = currentSubscription()
