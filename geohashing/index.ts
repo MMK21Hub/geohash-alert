@@ -1,5 +1,6 @@
 import { DateTime } from "luxon"
 import { createHash } from "node:crypto"
+import type { Graticule, LatLng } from "./helpers"
 
 /** @see https://geohashing.site/geohashing/Dow_Jones_Industrial_Average */
 // Alternative servers: www1.geo.crox.net or www2.geo.crox.net
@@ -29,10 +30,6 @@ function getApplicableDate(givenDate: DateTime): DateTime<true> {
   // Previous day
   return givenDate.minus({ days: 1 })
 }
-
-/** @example ["51", "-0"] */
-export type Graticule = [string, string]
-export type LatLng = [number, number]
 
 export class Geohashing {
   djiaCache: Map<string, string> = new Map()
@@ -72,11 +69,6 @@ export class Geohashing {
     const geohashLon = graticuleLon + "." + lonDecimal.toString().slice(2)
     return [parseFloat(geohashLat), parseFloat(geohashLon)]
   }
-
-  static coordsToGraticule(lat: number, lon: number): Graticule {
-    // This method ensures we preserve negative zero
-    const wholeNumberPartLat = lat.toString().split(".")[0]
-    const wholeNumberPartLon = lon.toString().split(".")[0]
-    return [wholeNumberPartLat, wholeNumberPartLon]
-  }
 }
+
+export { coordsToGraticule, type Graticule, type LatLng } from "./helpers"
