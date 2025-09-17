@@ -1,10 +1,10 @@
 import { $ } from "voby"
 import { serviceWorkerRegistration } from "./service-worker-manager"
-import { Geohashing, Graticule, LatLng } from "@mmk21/geohashing"
+import { coordsToGraticule, LatLng } from "@mmk21/geohashing/helpers"
 
 async function subscribeToAlerts(homeCoords: LatLng) {
   const sw = await serviceWorkerRegistration
-  const homeGraticule = Geohashing.coordsToGraticule(...homeCoords)
+  const homeGraticule = coordsToGraticule(...homeCoords)
   const subscription = await sw.pushManager.subscribe({
     userVisibleOnly: true,
     // TODO: env
