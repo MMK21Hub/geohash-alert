@@ -111,6 +111,7 @@ async function subscribeToAlerts({
 
 function App(): JSX.Element {
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  const noDistanceLimit = $(false)
   return (
     <div>
       <div class="navbar bg-base-100 shadow-sm">
@@ -168,9 +169,9 @@ function App(): JSX.Element {
               />
             </label>
           </div>
-          <div>
-            <p class="text-md text-base-content/80 mb-4">
-              How close should a geohash be for you to receive an alert?
+          <div class="space-y-4">
+            <p class="text-md text-base-content/80 ">
+              How close should a geohash need to be for you to receive an alert?
             </p>
             <label class="input w-full min-w-[15em] max-w-sm">
               <span class="label">Maximum distance</span>
@@ -180,8 +181,23 @@ function App(): JSX.Element {
                 required
                 value="5"
                 class=""
+                disabled={noDistanceLimit}
               />
               <span class="label">km</span>
+            </label>
+            <br />
+            <label class="label">
+              <input
+                type="checkbox"
+                checked={noDistanceLimit}
+                onChange={() => noDistanceLimit(!noDistanceLimit())}
+                class="toggle"
+              />
+              <span
+                class={() => (noDistanceLimit() ? "text-base-content" : "")}
+              >
+                No distance limit
+              </span>
             </label>
           </div>
           <div>
