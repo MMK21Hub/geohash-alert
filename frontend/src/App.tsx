@@ -1,4 +1,12 @@
 import { $ } from "voby"
+import { serviceWorkerRegistration } from "./service-worker-manager"
+
+type Graticule = [string, string]
+
+async function subscribeToAlerts(graticule: Graticule) {
+  await serviceWorkerRegistration
+  // TODO...
+}
 
 function App(): JSX.Element {
   return (

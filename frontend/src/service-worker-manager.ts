@@ -1,3 +1,4 @@
-const registration = await navigator.serviceWorker.register("/sw.js")
+export const serviceWorkerRegistration =
+  navigator.serviceWorker.register("/sw.js")
 
 export {}
