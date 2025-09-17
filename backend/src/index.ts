@@ -6,7 +6,11 @@ import {
 } from "@mmk21/geohashing"
 import { DateTime } from "luxon"
 import { zValidator } from "@hono/zod-validator"
-import { setVapidDetails, type PushSubscription } from "web-push"
+import {
+  sendNotification,
+  setVapidDetails,
+  type PushSubscription,
+} from "web-push"
 import * as z from "zod/v4"
 import { cleanEnv, str } from "envalid"
 
@@ -97,6 +101,25 @@ app.post(
     console.debug(
       `New subscription received for ${homeGraticule} with endpoint ${subscription.endpoint}`
     )
+    return c.json({ success: true })
+  }
+)
+
+app.post(
+  "/api/v1/test-subscription",
+  zValidator(
+    "json",
+    z.object({
+      subscription: PushSubscription,
+    })
+  ),
+  async (c) => {
+    const { subscription } = c.req.valid("json")
+    const payload = JSON.stringify({
+      type: "test-alert",
+      time: new Date().toISOString(),
+    })
+    await sendNotification(subscription, payload)
     return c.json({ success: true })
   }
 )
