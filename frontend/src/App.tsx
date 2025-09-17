@@ -118,7 +118,7 @@ function App(): JSX.Element {
           Geohash Alert
         </a>
       </div>
-      <main class="py-6 px-4">
+      <main class="py-6 px-4 max-w-3xl mx-auto">
         <form
           onSubmit={async (e) => {
             e.preventDefault()
@@ -149,9 +149,9 @@ function App(): JSX.Element {
         >
           <div>
             <p class="text-md text-base-content/80 mb-4">
-              Where do you want to get notifications for? Exact coordinates are
-              stored securely in your browser, and approximate coordinates are
-              sent to the server.
+              Provide a location to get alerts for nearby geohashes. Exact
+              coordinates are stored securely in your browser, and approximate
+              coordinates are sent to the server.
             </p>
             <label class="floating-label">
               <span>Enter your home coordinates</span>
