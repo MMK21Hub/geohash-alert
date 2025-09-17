@@ -30,6 +30,8 @@ async function subscribeToAlerts(homeCoords: LatLng) {
 }
 
 function App(): JSX.Element {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
   return (
     <div>
       <div class="navbar bg-base-100 shadow-sm">
@@ -70,7 +72,22 @@ function App(): JSX.Element {
               }}
             />
           </label>
-          <button type="submit" class="btn mt-6">
+          <div class="mt-8 text-md text-base-content/80">
+            When would you like to receive daily alerts? They will be scheduled
+            in your local timezone ({timeZone}).
+          </div>
+          <label class="input w-full min-w-[15em] max-w-sm mt-4">
+            <span class="label">Notification time</span>
+            <input
+              type="time"
+              id="notification-time"
+              required
+              value="07:15"
+              class=""
+            />
+          </label>
+          <br />
+          <button type="submit" class="btn mt-8">
             Subscribe to alerts
           </button>
         </form>
