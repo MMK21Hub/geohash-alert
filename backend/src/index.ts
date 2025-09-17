@@ -83,15 +83,15 @@ app.post(
     z.object({
       subscription: PushSubscription,
       homeGraticule: z.tuple([z.string(), z.string()]).refine(([lat, lng]) => {
-        Lat.safeParse(lat).success && Lng.safeParse(lng).success
+        return Lat.safeParse(lat).success && Lng.safeParse(lng).success
       }),
     })
   ),
   async (c) => {
-    const subscription = c.req.valid("json")
-    subscriptions.push(subscription)
+    const { subscription, homeGraticule } = c.req.valid("json")
+    subscriptions.push({ subscription, homeGraticule })
     console.debug(
-      `New subscription received with endpoint ${subscription.endpoint}`
+      `New subscription received for ${homeGraticule} with endpoint ${subscription.endpoint}`
     )
     return c.json({ success: true })
   }
