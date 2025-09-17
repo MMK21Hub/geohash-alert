@@ -29,8 +29,8 @@ if [[ $(git status -s --porcelain) ]]; then
 fi
 
 # Bump version and commit
-uv version "$version"
-git add pyproject.toml uv.lock
+bun pm version $version
+git add package.json bun.lock
 git commit -m"Bump version to $version"
 # Tag and push the tag
 git tag "$version_tag"
