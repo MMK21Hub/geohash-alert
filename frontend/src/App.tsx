@@ -1,8 +1,4 @@
-import { $, useEffect } from "voby"
-import { serviceWorkerRegistration } from "./service-worker-manager"
-import { coordsToGraticule, LatLng } from "@mmk21/geohashing/helpers"
 import TestSubscription from "./TestSubscription"
-import { GeohashSubscriptionInfo } from "./types"
 import { currentSubscription } from "./subscription-manager"
 import Subscribe from "./Subscribe"
 import SubscriptionInfo from "./SubscriptionInfo"
