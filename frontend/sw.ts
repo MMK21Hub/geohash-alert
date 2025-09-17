@@ -1,24 +1,20 @@
+import type { PushMessage } from "../backend/src/message"
+
 /// <reference lib="webworker" />
 self.addEventListener("push", (event: PushEvent) =>
   event.waitUntil(handlePush(event))
 )
 
 async function handlePush(event: PushEvent) {
-  const data = event.data?.json() || {}
+  const data: PushMessage = event.data?.json()
   const selfRegistration = await navigator.serviceWorker.getRegistration("/")
   console.log("Registration", selfRegistration, "sending notification", data)
-  if (data.type === "test-alert") {
-    await selfRegistration?.showNotification(
-      "Geohash Alert (manually triggered)",
-      {
-        body: `This is a test alert sent at ${data.time}`,
-        icon: "/icon.png",
-      }
-    )
-    return
-  }
-  await selfRegistration.showNotification(data.title || "Geohash Alert", {
-    body: data.body || JSON.stringify(data),
+  const title = data.isTest
+    ? "Geohash Alert (manually triggered)"
+    : "Nearby geohash"
+  const body = `Today's geohash for ${data.geohash.graticule} is TODOm away, at ${data.geohash.location}`
+  await selfRegistration.showNotification(title, {
+    body: body,
     icon: "/icon.png",
   })
 }

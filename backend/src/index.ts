@@ -13,6 +13,7 @@ import {
 } from "web-push"
 import * as z from "zod/v4"
 import { cleanEnv, str } from "envalid"
+import type { AlertMessage, TestAlertMessage } from "./message"
 
 const env = cleanEnv(process.env, {
   VAPID_PUBLIC_KEY: str(),
@@ -114,12 +115,37 @@ app.post(
     })
   ),
   async (c) => {
-    const { subscription } = c.req.valid("json")
-    const payload = JSON.stringify({
-      type: "test-alert",
-      time: new Date().toISOString(),
-    })
-    await sendNotification(subscription, payload)
+    const provided = c.req.valid("json")
+    const entry = subscriptions.find(
+      (sub) => sub.subscription.endpoint === provided.subscription.endpoint
+    )
+    if (!entry)
+      return c.json(
+        {
+          success: false,
+          error: {
+            name: "NotFoundError",
+            message: "Subscription not found in database",
+          },
+        },
+        404
+      )
+
+    const geohashCoords = await geohashing.getGeohash(
+      DateTime.now(),
+      entry.homeGraticule
+    )
+    const message: TestAlertMessage = {
+      type: "alert",
+      isTest: true,
+      geohash: geohashCoords
+        ? {
+            graticule: entry.homeGraticule,
+            location: geohashCoords,
+          }
+        : undefined,
+    }
+    await sendNotification(entry.subscription, JSON.stringify(message))
     return c.json({ success: true })
   }
 )
