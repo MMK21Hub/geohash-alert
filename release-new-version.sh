@@ -28,12 +28,8 @@ if [[ $(git status -s --porcelain) ]]; then
   read -r -p "Press Ctrl+C to cancel, or Enter to continue. "
 fi
 
-# Bump version and commit
+# Bump version, commit and tag
 bun pm version $version
-git add package.json bun.lock
-git commit -m"Bump version to $version"
-# Tag and push the tag
-git tag "$version_tag"
 git push origin "$version_tag"
 
 if [[ $? -ne 0 ]]; then
